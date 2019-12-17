@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/performance-jpa
+    username: postgres
+    password: postgres
+    hikari:
+      pool-name: performance-jpa-pool
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: false
+        temp:
+          use_jdbc_metadata_defaults: false
+  main:
+    allow-bean-definition-overriding: true
+    lazy-initialization: true
