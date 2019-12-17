@@ -1,6 +1,5 @@
 package com.tatsumibruno.performance_jpa.order.domain;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,16 +17,21 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Order {
+
     @Id
     @GeneratedValue
     private UUID id;
+
     @NotNull
     private Long number;
+
     @Column(name = "created_at")
     @NotNull
     private LocalDateTime createdAt = LocalDateTime.now();
+
     @NotNull
     private String customer;
+
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> items = new ArrayList<>();
 
@@ -39,7 +43,6 @@ public class Order {
         return order;
     }
 
-    @JsonGetter
     public List<OrderItem> getItems() {
         return new ArrayList<>(items);
     }
