@@ -1,5 +1,6 @@
 package com.tatsumibruno.performance_jpa.order.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
+@Getter
 @Builder
 @Table(name = "order_items")
 @EqualsAndHashCode(of = "id")
@@ -16,25 +18,26 @@ import java.util.UUID;
 public class OrderItem {
 
     @Id
-    @Getter
     @GeneratedValue
     private UUID id;
 
-    @Getter
     @NotNull
     private String product;
 
-    @Getter
     @NotNull
     @Column(name = "unit_price")
     private BigDecimal unitPrice;
 
     @NotNull
-    @Getter
     private BigDecimal quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "order_item_order_fk"))
     private Order order;
 
+    /* Necessário para evitar problemas de recursividade durante a serialização */
+    @JsonIgnore
+    public Order getOrder() {
+        return order;
+    }
 }

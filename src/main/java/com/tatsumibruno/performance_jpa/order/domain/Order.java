@@ -5,10 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Entity
@@ -32,8 +29,8 @@ public class Order {
     @NotNull
     private String customer;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<OrderItem> items = new ArrayList<>();
+    @Transient
+    private List<OrderItem> items = new LinkedList<>();
 
     public static Order of(String customer) {
         Order order = new Order();

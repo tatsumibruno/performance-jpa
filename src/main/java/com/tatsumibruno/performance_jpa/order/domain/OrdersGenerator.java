@@ -13,6 +13,8 @@ public class OrdersGenerator implements ApplicationRunner {
     @Autowired
     private OrderRepository repository;
     @Autowired
+    private OrderItemRepository itemRepository;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
@@ -20,13 +22,14 @@ public class OrdersGenerator implements ApplicationRunner {
         jdbcTemplate.update("TRUNCATE ORDERS CASCADE");
         for (int i = 0; i < 3000; i++) {
             Order order = Order.of(String.format("Customer %s", i));
-            order.addItem(OrderItem.builder()
-                    .order(order)
+            Order persistedOrder = repository.save(order);
+            OrderItem item = OrderItem.builder()
+                    .order(persistedOrder)
                     .product(String.format("Product %s", i))
                     .quantity(BigDecimal.ONE)
                     .unitPrice(BigDecimal.valueOf(1.99))
-                    .build());
-            repository.save(order);
+                    .build();
+            itemRepository.save(item);
         }
     }
 }
